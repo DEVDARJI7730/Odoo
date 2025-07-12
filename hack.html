@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReWear - Community Clothing Exchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F8A8B;
+            --secondary: #EEEEEE;
+            --accent: #FBD46D;
+            --dark: #070D59;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-accent:hover {
+            background-color: #f0c24a;
+            transform: translateY(-2px);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card-shadow:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .carousel {
+            scroll-behavior: smooth;
+        }
+        
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .item-card {
+            transition: all 0.3s ease;
+        }
+        
+        .item-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .drawer {
+            transition: transform 0.3s ease;
+        }
+        
+        .drawer-open {
+            transform: translateX(0);
+        }
+        
+        .drawer-closed {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                <span class="text-xl font-bold text-blue-800">RW</span>
+            </div>
+            <h1 class="text-xl font-bold text-gray-800">ReWear</h1>
+        </div>
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#about" class="text-gray-600 hover:text-gray-900">About</a>
+            <a href="#how-it-works" class="text-gray-600 hover:text-gray-900">How It Works</a>
+            <a href="#featured" class="text-gray-600 hover:text-gray-900">Featured</a>
+            <button onclick="toggleAuthModal()" class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700">Sign In</button>
+        </div>
+        <button class="md:hidden" onclick="toggleMobileMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" onclick="toggleMobileMenu()">
+        <div class="absolute right-0 top-0 h-full w-64 bg-white shadow-lg p-4" onclick="event.stopPropagation()">
+            <div class="flex justify-end mb-8">
+                <button onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-6">
+                <a href="#about" class="text-gray-800 hover:text-blue-600" onclick="toggleMobileMenu()">About</a>
+                <a href="#how-it-works" class="text-gray-800 hover:text-blue-600" onclick="toggleMobileMenu()">How It Works</a>
+                <a href="#featured" class="text-gray-800 hover:text-blue-600" onclick="toggleMobileMenu()">Featured</a>
+                <button onclick="toggleAuthModal()" class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 mt-4">Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 px-6 md:px-16">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Swap Clothes, Not Waste</h1>
+                <p class="text-xl mb-8">Join our sustainable fashion community and give your unused clothes a new life through direct swaps or our point-based system.</p>
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    <button onclick="toggleAuthModal()" class="px-6 py-3 rounded-full bg-yellow-400 text-gray-900 font-medium hover:bg-yellow-300 transition">Start Swapping</button>
+                    <button class="px-6 py-3 rounded-full bg-white bg-opacity-20 text-white font-medium hover:bg-opacity-30 transition">Learn More</button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative">
+                    <div class="absolute -top-6 -left-6 w-64 h-64 bg-yellow-400 opacity-20 rounded-full"></div>
+                    <div class="absolute -bottom-6 -right-6 w-64 h-64 bg-blue-400 opacity-20 rounded-full"></div>
+                    <img src="ZARAGROUP.jpg" alt="Diverse group of people exchanging clothes sustainably with stylish clothing items shown" class="relative z-10 rounded-lg shadow-xl w-full max-w-md" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 px-6 md:px-16 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12">Sustainable Fashion Made Simple</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Verified Quality</h3>
+                    <p class="text-gray-600">Every item is carefully reviewed to ensure it meets our quality standards before listing.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Point System</h3>
+                    <p class="text-gray-600">Earn points for listing items and redeem them for clothes you love, no direct swap needed.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Environmental Impact</h3>
+                    <p class="text-gray-600">Each swap helps reduce textile waste and promotes a circular fashion economy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 px-6 md:px-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12">How ReWear Works</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
+                    <div class="bg-blue-100 text-blue-700 font-bold rounded-full w-10 h-10 flex items-center justify-center mb-4">1</div>
+                    <h3 class="text-lg font-semibold mb-2">Sign Up</h3>
+                    <p class="text-gray-600">Create your free account in minutes.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
+                    <div class="bg-blue-100 text-blue-700 font-bold rounded-full w-10 h-10 flex items-center justify-center mb-4">2</div>
+                    <h3 class="text-lg font-semibold mb-2">List Items</h3>
+                    <p class="text-gray-600">Upload photos and details of clothes you want to swap.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
+                    <div class="bg-blue-100 text-blue-700 font-bold rounded-full w-10 h-10 flex items-center justify-center mb-4">3</div>
+                    <h3 class="text-lg font-semibold mb-2">Browse & Choose</h3>
+                    <p class="text-gray-600">Find items you love from our community.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
+                    <div class="bg-blue-100 text-blue-700 font-bold rounded-full w-10 h-10 flex items-center justify-center mb-4">4</div>
+                    <h3 class="text-lg font-semibold mb-2">Swap or Redeem</h3>
+                    <p class="text-gray-600">Arrange a swap or use your points to redeem items.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Items Section -->
+    <section id="featured" class="py-16 px-6 md:px-16 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Featured Items</h2>
+                <button class="text-blue-600 font-medium hover:underline">View All →</button>
+            </div>
+            <div class="relative">
+                <button onclick="scrollCarousel('left')" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div id="itemsCarousel" class="flex overflow-x-auto space-x-4 pb-6 scroll-smooth carousel">
+                    <!-- Item Cards -->
+                    <div class="flex-none w-64 bg-white rounded-lg overflow-hidden shadow-md card-shadow item-card">
+                        <div class="relative pb-3/4 h-48">
+                            <img src="Blackdress.png" alt="Black formal evening dress with lace details in excellent condition for swapping" class="absolute h-full w-full object-cover" />
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold">Evening Dress</h3>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Available</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Size M • Excellent condition</p>
+                            <p class="product-description hidden">Elegant black lace evening dress, perfect for formal events or parties. Barely worn, looks almost brand new.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-600">250 pts</span>
+                                <button class="text-blue-600 text-sm font-medium hover:underline">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-none w-64 bg-white rounded-lg overflow-hidden shadow-md card-shadow item-card">
+                        <div class="relative pb-3/4 h-48">
+                            <img src="denim.png" alt="Vintage blue denim jacket with distressed details in good condition" class="absolute h-full w-full object-cover" />
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold">Denim Jacket</h3>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Pending</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Size L • Good condition</p>
+                            <p class="product-description hidden">Classic blue denim jacket with subtle distressing. Ideal for layering and adding a vintage vibe to your look.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-600">180 pts</span>
+                                <button class="text-blue-600 text-sm font-medium hover:underline">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-none w-64 bg-white rounded-lg overflow-hidden shadow-md card-shadow item-card">
+                        <div class="relative pb-3/4 h-48">
+                            <img src="shoes.png" alt="Clean white canvas sneakers like new condition for swap" class="absolute h-full w-full object-cover" />
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold">White Sneakers</h3>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Available</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">Size 9 • Like new</p>
+                            <p class="product-description hidden">Minimal white canvas sneakers that go with anything. Comfortable for all-day wear and nearly spotless.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-600">200 pts</span>
+                                <button class="text-blue-600 text-sm font-medium hover:underline">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-none w-64 bg-white rounded-lg overflow-hidden shadow-md card-shadow item-card">
+                        <div class="relative pb-3/4 h-48">
+                            <img src="sweat.png" alt="Cashmere blend beige oversized sweater in very good condition" class="absolute h-full w-full object-cover" />
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold">Knit Sweater</h3>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Available</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">One size • Very good condition</p>
+                            <p class="product-description hidden">Cozy beige knit sweater made from a soft cashmere blend. Lightly used, with an oversized relaxed fit.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-600">150 pts</span>
+                                <button class="text-blue-600 text-sm font-medium hover:underline">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-none w-64 bg-white rounded-lg overflow-hidden shadow-md card-shadow item-card">
+                        <div class="relative pb-3/4 h-48">
+                            <img src="bag.png" alt="Brown leather crossbody bag with antique brass hardware" class="absolute h-full w-full object-cover" />
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold">Leather Bag</h3>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Taken</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">One size • Fair condition</p>
+                            <p class="product-description hidden">Vintage brown leather crossbody with antique brass zips. Slight wear on edges, still a stylish everyday carry.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-600">300 pts</span>
+                                <button class="text-blue-600 text-sm font-medium hover:underline">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="scrollCarousel('right')" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 px-6 md:px-16 bg-blue-50">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to Start Swapping?</h2>
+            <p class="text-xl text-gray-700 mb-8">Join thousands of others who are reducing textile waste and discovering unique fashion finds.</p>
+            <button onclick="toggleAuthModal()" class="px-8 py-3 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition">Join ReWear - It's Free</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6 md:px-16">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                        <span class="text-sm font-bold text-blue-800">RW</span>
+                    </div>
+                    <h3 class="text-xl font-bold">ReWear</h3>
+                </div>
+                <p class="text-gray-400">Sustainable fashion through community clothing exchanges.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4">Company</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Impact</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Help Center</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Community Guidelines</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Sustainability Tips</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Swapping Guide</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-500 mb-4 md:mb-0">© 2025 ReWear. All rights reserved.</p>
+            <div class="flex space-x-6">
+                <a href="#" aria-label="Facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full p-6 relative">
+            <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div id="loginTab" class="block">
+                <h2 class="text-2xl font-bold mb-6">Welcome Back</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label for="loginEmail" class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="loginPassword" class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mb-4">Sign In</button>
+                </form>
+                <p class="text-center text-gray-600 mb-4">or</p>
+                <button onclick="handleGoogleLogin()" class="w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.801-1.683-4.247-2.701-6.735-2.701-5.523 0-10 4.477-10 10s4.477 10 10 10c8.396 0 10-7.361 10-10 0-0.669-0.051-1.367-0.149-2.061h-9.851z" />
+                    </svg>
+                    Continue with Google
+                </button>
+                <p class="text-center text-sm text-gray-600">Don't have an account? <button onclick="switchAuthTab('register')" class="text-blue-600 hover:underline">Sign up</button></p>
+                <p class="text-center text-sm text-gray-600 mt-2"><a href="#" class="text-blue-600 hover:underline">Forgot password?</a></p>
+            </div>
+            
+            <div id="registerTab" class="hidden">
+                <h2 class="text-2xl font-bold mb-6">Join ReWear</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="mb-4">
+                        <label for="registerName" class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="registerName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerEmail" class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="registerEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="registerPassword" class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="registerPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mb-4">Create Account</button>
+                </form>
+                <p class="text-center text-gray-600 mb-4">or</p>
+                <button onclick="handleGoogleLogin()" class="w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.801-1.683-4.247-2.701-6.735-2.701-5.523 0-10 4.477-10 10s4.477 10 10 10c8.396 0 10-7.361 10-10 0-0.669-0.051-1.367-0.149-2.061h-9.851z" />
+                    </svg>
+                    Continue with Google
+                </button>
+                <p class="text-center text-sm text-gray-600">Already have an account? <button onclick="switchAuthTab('login')" class="text-blue-600 hover:underline">Sign in</button></p>
+            </div>
+        </div>
+    </div>
+    <!-- ✅ Item Details Modal -->
+<!-- ✅ Full Product Details Modal -->
+<div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+  <div class="bg-white rounded-lg max-w-md w-full p-6 relative shadow-lg">
+    <button onclick="toggleDetailsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="text-center mt-4">
+      <img id="detailsImage" src="" alt="Product Image" class="w-full h-48 object-cover rounded mb-4 shadow" />
+      <h2 id="detailsName" class="text-2xl font-bold text-gray-800 mb-1"></h2>
+      <p id="detailsStatus" class="text-sm font-medium mb-2"></p>
+      <p id="detailsPoints" class="text-blue-600 font-semibold text-lg mb-1"></p>
+      <p id="detailsSizeCondition" class="text-gray-600 text-sm mb-2"></p>
+      <p id="detailsDescription" class="text-gray-700 text-sm italic"></p>
+    </div>
+  </div>
+</div>
+
+
+    <!-- User Dashboard Drawer -->
+    <div id="dashboardDrawer" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-xl z-40 drawer drawer-closed">
+        <div class="relative h-full">
+            <button onclick="toggleDashboardDrawer()" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="pt-16 px-6 h-full overflow-y-auto">
+                <div class="flex flex-col items-center mb-8">
+                    <div class="w-24 h-24 rounded-full bg-gray-200 mb-4 overflow-hidden">
+                        <img src="https://via.placeholder.com/96x96?text=Profile" alt="Sarah Johnson's profile photo showing a smiling woman happily swapping clothes" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-xl font-bold">Sarah Johnson</h2>
+                    <p class="text-gray-600">Member since Sep 2022</p>
+                    <div class="mt-4 px-4 py-2 bg-blue-50 rounded-full flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="font-semibold text-blue-600">850 points</span>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        My Items
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm text-gray-600 mb-1">Listed</div>
+                            <div class="text-xl font-bold">12</div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm text-gray-600 mb-1">Swapped</div>
+                            <div class="text-xl font-bold">8</div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm text-gray-600 mb-1">Pending</div>
+                            <div class="text-xl font-bold">3</div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm text-gray-600 mb-1">Redeemed</div>
+                            <div class="text-xl font-bold">5</div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="addItem()">Add New Item</button>
+                    <div id="selectedProductPreview" class="mt-4 hidden border border-gray-200 rounded-lg p-4 bg-gray-50">
+    <h4 class="font-semibold text-lg mb-2">Selected Product</h4>
+    <img id="selectedProductImage" src="" alt="" class="w-full h-40 object-cover rounded mb-2">
+    <p id="selectedProductName" class="text-gray-800 font-medium"></p>
+    <p id="selectedProductPoints" class="text-blue-600 font-semibold"></p>
+</div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
+                            Recent Activity
+                        </h3>
+                        <button class="text-sm text-blue-600">View All</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Swap completed: Denim Jacket</p>
+                                <p class="text-xs text-gray-500">Today, 10:42 AM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-3 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Swap request pending: Leather Bag</p>
+                                <p class="text-xs text-gray-500">Yesterday, 3:15 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Redeemed 200 points: White Sneakers</p>
+                                <p class="text-xs text-gray-500">Nov 12, 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span class="text-sm">Add Item</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm">My Listings</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            <span class="text-sm">Received</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-sm">Settings</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button class="w-full flex items-center justify-center px-4 py-2 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let selectedProduct = null;
+
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    }
+
+    function toggleAuthModal() {
+        const authModal = document.getElementById('authModal');
+        authModal.classList.toggle('hidden');
+    }
+
+    function switchAuthTab(tab) {
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+
+        if (tab === 'login') {
+            loginTab.classList.remove('hidden');
+            registerTab.classList.add('hidden');
+        } else {
+            loginTab.classList.add('hidden');
+            registerTab.classList.remove('hidden');
+        }
+    }
+
+    function handleLogin(event) {
+        event.preventDefault();
+        toggleAuthModal();
+        toggleDashboardDrawer();
+    }
+
+    function handleRegister(event) {
+        event.preventDefault();
+        toggleAuthModal();
+        toggleDashboardDrawer();
+    }
+
+    function handleGoogleLogin() {
+        toggleAuthModal();
+        toggleDashboardDrawer();
+    }
+
+    function toggleDashboardDrawer() {
+        const drawer = document.getElementById('dashboardDrawer');
+        drawer.classList.toggle('drawer-closed');
+        drawer.classList.toggle('drawer-open');
+    }
+
+    function scrollCarousel(direction) {
+        const carousel = document.getElementById('itemsCarousel');
+        const scrollAmount = 300;
+        carousel.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `fixed top-4 right-4 px-4 py-2 rounded font-medium z-50 ${
+        type === 'error' ? 'bg-red-600' : 'bg-green-600'
+    }`;
+    toast.classList.remove('hidden');
+
+    setTimeout(() => {
+        toast.classList.add('hidden');
+    }, 3000);
+}
+
+    function addItem() {
+    if (!selectedProduct) {
+        alert("No product selected. Tap a product first.");
+        return;
+    }
+
+    if (selectedProduct.status?.toLowerCase() === "taken") {
+        showToast("❌ This item is already taken.", "error");
+        return;
+    }
+
+    // ✅ If available, show product preview
+    const previewBox = document.getElementById('selectedProductPreview');
+    const img = document.getElementById('selectedProductImage');
+    const name = document.getElementById('selectedProductName');
+    const points = document.getElementById('selectedProductPoints');
+
+    img.src = selectedProduct.img;
+    name.textContent = selectedProduct.name;
+    points.textContent = selectedProduct.points;
+    showToast("❌ This item is already taken.", "error");
+    previewBox.classList.remove('hidden');
+}
+function toggleDetailsModal() {
+    const modal = document.getElementById('detailsModal');
+    modal.classList.toggle('hidden');
+}
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const itemCards = document.querySelectorAll('.item-card');
+
+    // 🔹 Handle clicking on a product card
+    itemCards.forEach(card => {
+        card.addEventListener('click', function (e) {
+            if (!e.target.closest('button')) {
+                const img = card.querySelector('img')?.src;
+                const name = card.querySelector('h3')?.textContent;
+                const points = card.querySelector('.font-bold.text-blue-600')?.textContent;
+                const status = card.querySelector('span.bg-green-100, span.bg-yellow-100, span.bg-red-100')?.textContent?.trim();
+
+                selectedProduct = { img, name, points, status };
+
+                toggleDashboardDrawer();
+            }
+        });
+    });
+
+    // 🔹 Handle "Details" button click
+    const detailButtons = document.querySelectorAll('.item-card button');
+    detailButtons.forEach(btn => {
+        if (btn.textContent.trim() === "Details") {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation(); // prevent profile drawer from opening
+
+                const card = btn.closest('.item-card');
+                const img = card.querySelector('img')?.src;
+                const name = card.querySelector('h3')?.textContent;
+                const points = card.querySelector('.font-bold.text-blue-600')?.textContent;
+                const status = card.querySelector('span.bg-green-100, span.bg-yellow-100, span.bg-red-100')?.textContent?.trim();
+                const sizeCondition = card.querySelector('p')?.textContent;
+                const description = card.querySelector('.product-description')?.textContent;
+
+
+                document.getElementById('detailsImage').src = img;
+                document.getElementById('detailsName').textContent = name;
+                document.getElementById('detailsPoints').textContent = points;
+                document.getElementById('detailsStatus').textContent = `Status: ${status}`;
+                document.getElementById('detailsSizeCondition').textContent = sizeCondition;
+                document.getElementById('detailsDescription').textContent = description || '';
+
+                toggleDetailsModal();
+            });
+        }
+    });
+
+    // 🔹 Update left/right arrow button visibility for carousel
+    const carousel = document.getElementById('itemsCarousel');
+    const leftButton = carousel.previousElementSibling;
+    const rightButton = carousel.nextElementSibling;
+
+    function updateCarouselButtons() {
+        const isAtStart = carousel.scrollLeft === 0;
+        const isAtEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth;
+        leftButton.style.display = isAtStart ? 'none' : 'block';
+        rightButton.style.display = isAtEnd ? 'none' : 'block';
+    }
+
+    carousel.addEventListener('scroll', updateCarouselButtons);
+    updateCarouselButtons();
+});
+function toggleDetailsModal() {
+    const modal = document.getElementById('detailsModal');
+    modal.classList.toggle('hidden');
+}
+
+</script>
+<div id="toast" class="fixed top-4 right-4 px-4 py-2 rounded text-white font-medium hidden z-50"></div>
+</body>
+</html>
