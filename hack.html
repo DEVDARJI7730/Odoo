@@ -688,16 +688,18 @@ function showToast(message, type = 'success') {
 
     function addItem() {
     if (!selectedProduct) {
-        alert("No product selected. Tap a product first.");
+        showToast("⚠️ No product selected. Please tap an item first.", "error");
         return;
     }
 
-    if (selectedProduct.status?.toLowerCase() === "taken") {
-        showToast("❌ This item is already taken.", "error");
+    console.log("Selected status:", selectedProduct.status); // 🔍 Debug log
+
+    if (selectedProduct.status === "taken") {
+        showToast("❌ This item is already taken and cannot be added.", "error");
         return;
     }
 
-    // ✅ If available, show product preview
+    // ✅ Otherwise, show preview
     const previewBox = document.getElementById('selectedProductPreview');
     const img = document.getElementById('selectedProductImage');
     const name = document.getElementById('selectedProductName');
@@ -706,9 +708,13 @@ function showToast(message, type = 'success') {
     img.src = selectedProduct.img;
     name.textContent = selectedProduct.name;
     points.textContent = selectedProduct.points;
-    showToast("❌ This item is already taken.", "error");
+
     previewBox.classList.remove('hidden');
+
+    // ✅ Optional: Success toast
+    showToast("✅ Item added successfully!", "success");
 }
+
 function toggleDetailsModal() {
     const modal = document.getElementById('detailsModal');
     modal.classList.toggle('hidden');
@@ -725,7 +731,8 @@ function toggleDetailsModal() {
                 const img = card.querySelector('img')?.src;
                 const name = card.querySelector('h3')?.textContent;
                 const points = card.querySelector('.font-bold.text-blue-600')?.textContent;
-                const status = card.querySelector('span.bg-green-100, span.bg-yellow-100, span.bg-red-100')?.textContent?.trim();
+                let statusElement = card.querySelector('span.bg-green-100, span.bg-yellow-100, span.bg-red-100');
+                let status = statusElement ? statusElement.textContent.trim().toLowerCase() : "";
 
                 selectedProduct = { img, name, points, status };
 
